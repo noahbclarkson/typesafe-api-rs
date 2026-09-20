@@ -53,6 +53,8 @@ jobs:
       - run: cargo test --workspace --all-features
       # The live tests are #[ignore]d and cost money. Prove they still compile.
       - run: cargo test --workspace --all-features --no-run
+
+  features:
     name: feature powerset
     runs-on: ubuntu-latest
     steps:
@@ -99,7 +101,11 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
+      # There is no published baseline to compare against until 0.1.0 is on
+      # crates.io, so this reports rather than blocks. Drop continue-on-error
+      # once the first release lands.
       - uses: obi1kenobi/cargo-semver-checks-action@v2
+        continue-on-error: true
 
   typos:
     name: typos
