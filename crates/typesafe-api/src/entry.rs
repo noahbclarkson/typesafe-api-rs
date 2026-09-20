@@ -15,7 +15,7 @@ use serde_json::Value;
 /// missing description and an explicitly null one are the same value.
 ///
 /// ```
-/// use system_one::Entry;
+/// use typesafe_api::Entry;
 ///
 /// let plain: Entry = "Does this convey urgency?".into();
 /// let structured = Entry::fields([
@@ -61,12 +61,12 @@ impl Entry {
     /// Use this to point a question at a record from your own code.
     ///
     /// ```
-    /// use system_one::Entry;
+    /// use typesafe_api::Entry;
     /// # #[derive(serde::Serialize)]
     /// # struct Candidate { name: &'static str }
     /// let entry = Entry::json(Candidate { name: "John Smith" })?;
     /// assert!(matches!(entry, Entry::Object(_)));
-    /// # Ok::<_, system_one::InvalidEntry>(())
+    /// # Ok::<_, typesafe_api::InvalidEntry>(())
     /// ```
     pub fn json(value: impl Serialize) -> Result<Self, InvalidEntry> {
         let value =

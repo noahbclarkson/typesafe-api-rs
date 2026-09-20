@@ -80,6 +80,16 @@ pub enum Error {
         available: Vec<String>,
     },
 
+    /// A Choice answer named an option the target enum does not declare.
+    #[error("answer `{id}`: {source}")]
+    UnknownOption {
+        /// The question id whose answer could not be read.
+        id: String,
+        /// What came back and what was expected.
+        #[source]
+        source: Box<crate::typed::UnknownOption>,
+    },
+
     /// An answer was read as the wrong kind.
     #[error("answer `{id}` is a {found}, not a {expected}")]
     AnswerKind {

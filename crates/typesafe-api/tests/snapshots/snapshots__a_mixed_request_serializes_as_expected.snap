@@ -1,0 +1,45 @@
+---
+source: crates/typesafe-api/tests/snapshots.rs
+expression: request
+---
+{
+  "state": "Shoes arrived two weeks late and in the wrong size. Also I see two charges of $120.",
+  "model": "jev-latest",
+  "questions": {
+    "department": {
+      "type": "choice",
+      "instructions": "Which team should handle this?",
+      "criteria": {
+        "returns": "Exchanges, wrong or damaged items",
+        "shipping": "Delivery status, delays, lost packages",
+        "billing": "Charges, invoices, payment problems"
+      }
+    },
+    "tone": {
+      "type": "choice",
+      "instructions": "What is the customer's tone?",
+      "criteria": {
+        "calm": null,
+        "frustrated": null,
+        "angry": null
+      }
+    },
+    "frustration": {
+      "type": "score",
+      "instructions": "How frustrated is the customer?",
+      "criteria": [
+        "Calm",
+        "Frustrated but civil",
+        "Very angry"
+      ]
+    },
+    "is_urgent": {
+      "type": "noul",
+      "instructions": "The message conveys urgency",
+      "criteria": {
+        "true": "Explicitly time-sensitive",
+        "false": "No urgency expressed"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+error: unsupported field type: an Evaluation field must be NoulAnswer, ChoiceOf<T>, ScoreOf<T>, or Option<_> of one of those
+ --> tests/ui/evaluation_unsupported_field.rs:6:5
+  |
+6 |     answer: String,
+  |     ^^^^^^

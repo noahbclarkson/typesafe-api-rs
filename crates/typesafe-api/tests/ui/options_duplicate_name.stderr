@@ -1,0 +1,5 @@
+error: `billing` is used by more than one variant; option names must be unique
+ --> tests/ui/options_duplicate_name.rs:9:5
+  |
+9 |     Payments,
+  |     ^^^^^^^^

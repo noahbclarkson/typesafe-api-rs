@@ -6,8 +6,8 @@ now saves a long review later.
 ## Getting set up
 
 ```sh
-git clone https://github.com/OWNER/system-one-rs
-cd system-one-rs
+git clone https://github.com/OWNER/typesafe-api-rs
+cd typesafe-api-rs
 cargo test --workspace --all-features
 ```
 
@@ -40,7 +40,7 @@ public API. It records why things are the way they are, and a pull request that
 contradicts it should say so and argue the case.
 
 **The wire format is the contract.** Anything that changes the JSON sent or
-accepted needs a test in `crates/system-one/tests/wire.rs`, ideally quoting the
+accepted needs a test in `crates/typesafe-api/tests/wire.rs`, ideally quoting the
 payload from the API reference.
 
 **Errors are for the person reading them at 2am.** An error should say what was

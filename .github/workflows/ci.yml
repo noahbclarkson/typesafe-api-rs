@@ -51,8 +51,8 @@ jobs:
           toolchain: ${{ matrix.rust }}
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --workspace --all-features
-
-  features:
+      # The live tests are #[ignore]d and cost money. Prove they still compile.
+      - run: cargo test --workspace --all-features --no-run
     name: feature powerset
     runs-on: ubuntu-latest
     steps:
@@ -62,6 +62,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo hack check --workspace --feature-powerset --depth 2 --no-dev-deps
 
+  # The versions in Cargo.toml are floors, so check that the floors are real.
+  # direct-minimal-versions only lowers our own dependencies, which keeps this
+  # job about our manifest rather than about the whole ecosystem.
   minimal-versions:
     name: minimal dependency versions
     runs-on: ubuntu-latest
@@ -70,7 +73,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@nightly
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo +nightly generate-lockfile -Z minimal-versions
+      - run: cargo +nightly generate-lockfile -Z direct-minimal-versions
       - run: cargo test --workspace --all-features
 
   coverage:

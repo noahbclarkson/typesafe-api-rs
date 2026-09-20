@@ -59,7 +59,7 @@ hand.
 `Answer`/`NoulAnswer`/`ChoiceAnswer`/`ScoreAnswer`, `Usage`, `ModelCard`.
 
 Round-tripped against the payloads published in the API reference by
-`crates/system-one/tests/wire.rs`. Decisions worth naming:
+`crates/typesafe-api/tests/wire.rs`. Decisions worth naming:
 
 - **`Entry` has no `Null` variant.** Absence is `Option<Entry>`, so a missing
   description and an explicitly null one are one value, not two.
@@ -78,7 +78,7 @@ Round-tripped against the payloads published in the API reference by
   here without an upgrade.
 - **`Error::Api` is boxed** so `Result<T, Error>` stays small on the happy path.
 
-### Layer 1 — the client (next)
+### Layer 1 — the client (built)
 
 ```rust
 // Construction
@@ -87,7 +87,7 @@ Client::new("sk-...")?;
 Client::builder()
     .api_key("sk-...")                   // or leave it to the environment
     .base_url("https://api.typesafe.ai")
-    .model(system_one::JEV_LATEST)
+    .model(typesafe_api::JEV_LATEST)
     .timeout(Duration::from_secs(10))    // per attempt
     .deadline(Duration::from_secs(30))   // whole call, retries included
     .retry(RetryPolicy::default().max_retries(3))
@@ -98,7 +98,7 @@ Client::builder()
 
 // Calls
 client.evaluate(state, questions).await?          -> Response
-client.evaluate_as::<T: Evaluation>(state).await? -> T
+client.evaluate_as::<T, _>(state).await?           -> T  (T: Evaluation)
 client.models().await?                            -> Vec<ModelCard>
 
 // Per-call overrides, same knobs as the builder
@@ -125,9 +125,9 @@ response.request_id                                          // x-typesafe-reque
 ```
 
 The blocking client mirrors it behind the `blocking` feature, sharing every type
-except the future: `system_one::blocking::Client`.
+except the future: `typesafe_api::blocking::Client`.
 
-### Layer 2 — typed options and levels (`derive`)
+### Layer 2 — typed options and levels (built)
 
 ```rust
 #[derive(Options)]
@@ -159,7 +159,7 @@ instead, for anyone who would rather keep going.
 `#[derive(Levels)]` is the same shape for Score, in declaration order from
 level 0, and adds `nearest()`, `normalized()`, and `probability(level)`.
 
-### Layer 3 — the evaluation struct (`derive`)
+### Layer 3 — the evaluation struct (built)
 
 ```rust
 #[derive(Evaluation)]
@@ -200,7 +200,7 @@ let response = client.evaluate(&ticket, Triage::questions()).await?;
 let triage: Triage = response.extract()?;                  // typed from a raw response
 ```
 
-### Layer 4 — the documented patterns (`stream`)
+### Layer 4 — the documented patterns (built)
 
 Thin helpers over the API, not a framework. Each is a few lines and each stays
 optional.
@@ -210,8 +210,8 @@ optional.
 let results = client
     .evaluate_many(tickets, Triage::questions())
     .concurrency(16)
-    .try_collect::<Vec<_>>()
-    .await?;
+    .collect_all()   // or .try_collect() to stop at the first failure
+    .await;
 
 // Confidence-gated routing, the three-way split the docs recommend.
 match answer.gate(0.5, 0.9) {
@@ -225,7 +225,7 @@ let priority = Composite::new()
     .weigh(0.6, triage.severity.normalized())
     .weigh(0.3, triage.frustration.normalized())
     .weigh(0.1, triage.report_quality.normalized())
-    .value();
+    .sum();
 ```
 
 Fan-out is where Rust genuinely beats the alternatives: bounded concurrency over
@@ -234,7 +234,7 @@ a large corpus is a couple of lines and no thread pool.
 ## Dependencies
 
 The rule is to reuse rather than write, but every dependency must earn its place
-in a library that other people compile.
+in a library that other people compile. What shipped:
 
 | Crate | For | Why this one |
 | --- | --- | --- |
@@ -242,7 +242,7 @@ in a library that other people compile.
 | `indexmap` | ordered maps | reproducible requests without forcing `preserve_order` on the dependency graph |
 | `thiserror` | error types | the standard, no runtime cost |
 | `reqwest` | HTTP | the default in the ecosystem; users can hand in their own `Client` |
-| `backon` | retry with backoff and jitter | runtime-agnostic and covers **both** sync and async with one policy type, unlike `reqwest-retry`, which is async-only and would force a second retry implementation for the blocking client |
+| `backon` | the doubling, capped delay schedule | runtime-agnostic, so one schedule type serves both clients. `reqwest-retry` is async-only and would have forced a second implementation for the blocking client |
 | `tracing` | logging | replaces the custom `Logger` the other SDKs ship; users already have a subscriber |
 | `secrecy` | the API key | keeps the key out of `Debug` output by construction rather than by a manual impl |
 | `futures-util` | `stream` feature only | `buffer_unordered` for bounded fan-out |
@@ -288,8 +288,11 @@ bump is a minor release, called out in the changelog.
 | Phase | Contents | Status |
 | --- | --- | --- |
 | 0 | Wire types, validation, errors, tests | done |
-| 1 | Async client, retries, `models()`, escape hatches | next |
-| 2 | Blocking client, `wiremock` and `insta` suites | |
-| 3 | `derive`: `Options`, `Levels`, `Evaluation` | |
-| 4 | `stream`: fan-out, gating, composite scoring | |
-| 5 | Examples, cookbook ports, docs.rs polish, 0.1.0 release | |
+| 1 | Async client, retries, deadlines, `models()`, escape hatches | done |
+| 2 | Blocking client, `wiremock` and `insta` suites | done |
+| 3 | `derive`: `Options`, `Levels`, `Evaluation`, `trybuild` tests | done |
+| 4 | `stream`: fan-out; `Gate` and `Composite` | done |
+| 5 | Cookbook ports, live smoke tests, 0.1.0 release | next |
+
+Nothing is left stubbed: 47 tests cover the wire format, the client, retries,
+the derives, and the compile-time diagnostics.

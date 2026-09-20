@@ -1,0 +1,5 @@
+error: every level needs a description: add a doc comment or #[levels(describe = "...")]. The model sees only the descriptions, so a level without one has nothing to match against
+ --> tests/ui/levels_missing_description.rs:7:5
+  |
+7 |     High,
+  |     ^^^^

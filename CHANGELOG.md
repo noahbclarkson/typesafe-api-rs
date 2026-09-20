@@ -16,3 +16,18 @@ commits; add anything it cannot infer by hand.
   in the API reference.
 - Local request validation with per-field paths, tunable through `Limits`.
 - An error type that reports status, request id, and whether a retry could help.
+- An asynchronous `Client` and a synchronous `blocking::Client`, sharing every
+  type but the future, with builder configuration, environment variables, and
+  per-call overrides.
+- Retries with exponential backoff and jitter on `429`, `529`, `5xx`, connection
+  failures, and timeouts, honouring `Retry-After` and bounded by an optional
+  whole-call deadline.
+- `#[derive(Options)]`, `#[derive(Levels)]`, and `#[derive(Evaluation)]` behind
+  the `derive` feature, turning doc comments into the criteria the model sees
+  and reading answers back into the declared types.
+- `Client::evaluate_many` behind the `stream` feature, for bounded-concurrency
+  fan-out over a corpus.
+- `Gate` and `Composite`, the confidence-routing and composite-scoring patterns
+  from the API documentation.
+- Escape hatches at every layer: `Client::request`, `Client::send`, and
+  `Client::send_raw`.

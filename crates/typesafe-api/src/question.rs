@@ -31,7 +31,7 @@ impl Question {
 /// A yes/no question. The answer is the probability that the answer is yes.
 ///
 /// ```
-/// use system_one::Noul;
+/// use typesafe_api::Noul;
 ///
 /// let q = Noul::new("Has the customer contacted support about this before?")
 ///     .yes("Mentions a prior attempt, ticket, or that they have asked before")
@@ -87,7 +87,7 @@ impl Noul {
 /// probability distribution over the options.
 ///
 /// ```
-/// use system_one::Choice;
+/// use typesafe_api::Choice;
 ///
 /// let q = Choice::new("Which team should handle this?")
 ///     .option("billing", "Payments, invoicing, refunds")
@@ -159,7 +159,7 @@ impl Choice {
 /// position across the levels.
 ///
 /// ```
-/// use system_one::Score;
+/// use typesafe_api::Score;
 ///
 /// let q = Score::new("How severe is the reported issue?").levels([
 ///     "Cosmetic; no impact to functionality",

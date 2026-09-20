@@ -4,5 +4,5 @@ contact_links:
     url: https://docs.typesafe.ai
     about: Questions about the model, primitives, or pricing belong upstream.
   - name: Security report
-    url: https://github.com/OWNER/system-one-rs/security/advisories/new
+    url: https://github.com/OWNER/typesafe-api-rs/security/advisories/new
     about: Report a vulnerability privately.

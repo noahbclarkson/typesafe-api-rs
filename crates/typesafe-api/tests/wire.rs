@@ -3,12 +3,12 @@
 //! These are the contract. If the API changes shape, these fail first.
 
 use serde_json::{Value, json};
-use system_one::{
+use typesafe_api::{
     Answer, Choice, Entry, JEV_LATEST, Limits, Noul, Request, Response, Score, State, Verdict,
     questions, validate,
 };
 
-fn request(state: &str, questions: system_one::Questions) -> Request {
+fn request(state: &str, questions: typesafe_api::Questions) -> Request {
     Request {
         state: State::text(state),
         model: JEV_LATEST.to_owned(),
@@ -144,7 +144,7 @@ fn state_accepts_a_domain_struct() {
         messages: Vec<&'static str>,
     }
 
-    use system_one::IntoState;
+    use typesafe_api::IntoState;
     let state = Ticket {
         subject: "Duplicate charge",
         messages: vec!["I was charged twice"],
@@ -157,7 +157,7 @@ fn state_accepts_a_domain_struct() {
 
 #[test]
 fn state_rejects_a_shape_the_api_cannot_take() {
-    use system_one::IntoState;
+    use typesafe_api::IntoState;
     let error = 42_u32.into_state().unwrap_err();
     assert_eq!(
         error.to_string(),

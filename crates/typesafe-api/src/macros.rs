@@ -6,7 +6,7 @@
 /// each value so they can sit side by side, and keeps the order you wrote.
 ///
 /// ```
-/// use system_one::{Choice, Noul, questions};
+/// use typesafe_api::{Choice, Noul, questions};
 ///
 /// let questions = questions! {
 ///     "is_urgent" => Noul::new("Does this convey urgency?"),

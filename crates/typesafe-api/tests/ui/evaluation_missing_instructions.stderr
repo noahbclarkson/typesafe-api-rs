@@ -1,0 +1,5 @@
+error: every question needs instructions: add a doc comment or #[question(instructions = "...")]
+ --> tests/ui/evaluation_missing_instructions.rs:5:5
+  |
+5 |     is_urgent: NoulAnswer,
+  |     ^^^^^^^^^

@@ -4,7 +4,7 @@
 //! client is still being built. Run it with `cargo run --example triage`.
 
 use serde::Serialize;
-use system_one::{
+use typesafe_api::{
     Choice, IntoState, JEV_LATEST, Limits, Noul, Request, Response, Score, Verdict, questions,
     validate,
 };
@@ -90,7 +90,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         frustration
             .describe(frustration.nearest_level())
             .and_then(|entry| match entry {
-                system_one::Entry::Text(text) => Some(text.as_str()),
+                typesafe_api::Entry::Text(text) => Some(text.as_str()),
                 _ => None,
             })
             .unwrap_or("?"),

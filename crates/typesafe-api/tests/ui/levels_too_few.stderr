@@ -1,0 +1,5 @@
+error: a Levels enum needs at least two variants; a one-level scale has nothing to weigh, so ask a Noul instead
+ --> tests/ui/levels_too_few.rs:4:6
+  |
+4 | enum Bad {
+  |      ^^^

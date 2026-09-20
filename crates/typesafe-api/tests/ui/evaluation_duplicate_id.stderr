@@ -1,0 +1,5 @@
+error: `same` is used by more than one field; question ids must be unique
+  --> tests/ui/evaluation_duplicate_id.rs:10:5
+   |
+10 |     second: NoulAnswer,
+   |     ^^^^^^

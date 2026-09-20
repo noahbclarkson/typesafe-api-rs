@@ -1,5 +1,12 @@
 [graph]
 all-features = true
+# The platforms CI builds for. Without this the graph pulls in crates for
+# targets nobody here compiles, and their licences become our problem.
+targets = [
+  "x86_64-unknown-linux-gnu",
+  "aarch64-apple-darwin",
+  "x86_64-pc-windows-msvc",
+]
 
 [advisories]
 version = 2
@@ -7,7 +14,22 @@ yanked = "deny"
 
 [licenses]
 version = 2
-allow = ["MIT", "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "BSD-2-Clause", "BSD-3-Clause", "ISC", "Unicode-3.0", "Zlib"]
+# Permissive only. Anything copyleft should be a deliberate, reviewed decision,
+# not something that arrives with a patch bump.
+allow = [
+  "Apache-2.0",
+  "Apache-2.0 WITH LLVM-exception",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "CC0-1.0",
+  "CDLA-Permissive-2.0",
+  "ISC",
+  "MIT",
+  "MIT-0",
+  "Unicode-3.0",
+  "Unlicense",
+  "Zlib",
+]
 confidence-threshold = 0.93
 
 [bans]

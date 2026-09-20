@@ -97,7 +97,7 @@ impl NoulAnswer {
     /// Splits the value three ways so unsure cases can take their own path.
     ///
     /// ```
-    /// use system_one::{NoulAnswer, Verdict};
+    /// use typesafe_api::{NoulAnswer, Verdict};
     ///
     /// let answer = NoulAnswer { noul: 0.4 };
     /// assert_eq!(answer.verdict(0.2, 0.8), Verdict::Unsure);
