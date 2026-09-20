@@ -1,0 +1,5 @@
+# Everything is LF in the repository. The trybuild .stderr fixtures are compared
+# byte for byte, so a CRLF checkout on one platform would fail on another.
+* text=auto eol=lf
+*.snap text eol=lf
+*.stderr text eol=lf
