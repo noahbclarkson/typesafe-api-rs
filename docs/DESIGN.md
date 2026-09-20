@@ -144,20 +144,24 @@ enum Department {
 }
 ```
 
-The derive produces:
+The derive writes one `Options` impl:
 
-- `Department::criteria() -> IndexMap<String, Option<Entry>>`, from doc comments
-  or `describe`, in declaration order;
-- `FromStr`, so the returned `choice` string becomes a variant;
-- an `Options` impl that `ChoiceAnswer<Department>` uses for
-  `.value`, `.probability(Department::Sales)`, `.ranked()`, `.runners_up(0.25)`.
+- `criteria() -> IndexMap<String, Option<Entry>>`, from doc comments or
+  `describe`, in declaration order;
+- `variants()` and `option_name()`, the names as the API sees them;
+- `from_option(&str)`, which turns the returned `choice` back into a variant.
 
-An unknown option in the response is an error naming the variants, not a panic.
-The `#[options(unknown = Other)]` attribute redirects it to a catch-all variant
-instead, for anyone who would rather keep going.
+`ChoiceOf<Department>` is built on that impl and carries `.value`,
+`.probability(&Department::Sales)`, `.ranked()`, and `.runners_up(0.25)`.
+
+An unknown option is an `UnknownOption` error naming the variants, not a panic.
+Marking one variant `#[options(unknown)]` redirects it there instead, for anyone
+who would rather keep going.
 
 `#[derive(Levels)]` is the same shape for Score, in declaration order from
-level 0, and adds `nearest()`, `normalized()`, and `probability(level)`.
+level 0, and backs `ScoreOf<T>`: `nearest()`, `normalized()`, `top_level()`,
+`probability(&level)`, and `describe(&level)`. Levels are positions rather than
+names, so `Levels` takes `describe` but no `name` or `rename_all`.
 
 ### Layer 3 — the evaluation struct (built)
 
@@ -165,29 +169,33 @@ level 0, and adds `nearest()`, `normalized()`, and `probability(level)`.
 #[derive(Evaluation)]
 struct Triage {
     /// The message conveys urgency or time-sensitivity
-    is_urgent: Noul,
+    is_urgent: NoulAnswer,
 
     #[question(
         instructions = "Does the message request a refund or credit?",
         yes = "Directly asks for money back or an account credit",
-        no  = "A billing question with no requested remedy",
+        no = "A billing question with no requested remedy",
     )]
-    refund_requested: Noul,
+    refund_requested: NoulAnswer,
 
     /// Which team should handle this?
-    department: Choice<Department>,
+    department: ChoiceOf<Department>,
 
     /// How frustrated the customer appears
-    frustration: Score<Frustration>,
+    frustration: ScoreOf<Frustration>,
 
-    #[question(skip_if_absent)]
-    experimental: Option<Noul>,
+    /// An answer the server may not send back yet
+    experimental: Option<NoulAnswer>,
 }
 ```
 
 Field name becomes the question id. Doc comment becomes `instructions`, unless
-`#[question(instructions = ...)]` overrides it. `Choice<T>` and `Score<T>` take
-their criteria from `T`. Generated: `Triage::questions() -> Questions` and
+`#[question(instructions = ...)]` overrides it. `yes` and `no` fill in the two
+Noul criteria, and are rejected on a Choice or Score field. `ChoiceOf<T>` and
+`ScoreOf<T>` take their criteria from `T`. Wrapping a field in `Option` makes a
+missing answer `None` rather than an error, which is how a question the server
+does not answer stays non-fatal. Generated:
+`Triage::questions() -> Questions` and
 `Triage::from_response(&Response) -> Result<Triage, Error>`.
 
 This is the layer the other SDKs cannot reach, and it is why the crate exists.
@@ -257,8 +265,8 @@ Deliberately **not** used:
 - `once_cell` — `std::sync::OnceLock` covers it on the MSRV.
 
 Dev only: `wiremock` (HTTP fixtures), `insta` (snapshot the serialized request
-body — the wire format is the contract), `tokio` with `macros` and `rt`,
-`trybuild` (compile-fail tests for the derives), `rstest`.
+body — the wire format is the contract), `tokio` with `macros` and
+`rt-multi-thread`, and `trybuild` (compile-fail tests for the derives).
 
 ## Testing
 
@@ -269,9 +277,10 @@ body — the wire format is the contract), `tokio` with `macros` and `rt`,
    bodies, truncated responses, and unknown answer kinds.
 4. **Retry tests** — a mock that fails N times and counts attempts, asserting
    backoff bounds and that the deadline is honoured.
-5. **Compile-fail tests** — `trybuild` on the derives: a `Choice` field whose
-   type does not implement `Options`, a duplicate question id, a `Score` with
-   one level.
+5. **Compile-fail tests** — `trybuild` on the derives: seven fixtures covering
+   an unsupported field type, a duplicate question id, missing instructions, a
+   duplicate option name, a level with no description, a one-level `Levels`, and
+   `Options` on a struct.
 6. **Doc tests** — every public item with a non-obvious use carries one.
 7. **Live tests** — behind `--ignored` and gated on `TYPESAFE_API_KEY`. Never in
    CI on pull requests.
@@ -292,7 +301,8 @@ bump is a minor release, called out in the changelog.
 | 2 | Blocking client, `wiremock` and `insta` suites | done |
 | 3 | `derive`: `Options`, `Levels`, `Evaluation`, `trybuild` tests | done |
 | 4 | `stream`: fan-out; `Gate` and `Composite` | done |
-| 5 | Cookbook ports, live smoke tests, 0.1.0 release | next |
+| 5 | Live smoke tests behind `--ignored` | done |
+| 6 | Cookbook ports, 0.1.0 release | next |
 
-Nothing is left stubbed: 47 tests cover the wire format, the client, retries,
-the derives, and the compile-time diagnostics.
+Nothing is left stubbed: 67 tests and 20 doc tests cover the wire format, the
+client, retries, the derives, and the compile-time diagnostics.
