@@ -7,7 +7,7 @@ The latest released minor version receives security fixes.
 ## Reporting a vulnerability
 
 Report privately through
-[GitHub security advisories](https://github.com/OWNER/typesafe-api-rs/security/advisories/new).
+[GitHub security advisories](https://github.com/noahbclarkson/typesafe-api-rs/security/advisories/new).
 Please do not open a public issue for a vulnerability.
 
 Expect an acknowledgement within three working days and an assessment within

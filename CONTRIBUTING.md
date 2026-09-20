@@ -6,7 +6,7 @@ now saves a long review later.
 ## Getting set up
 
 ```sh
-git clone https://github.com/OWNER/typesafe-api-rs
+git clone https://github.com/noahbclarkson/typesafe-api-rs
 cd typesafe-api-rs
 cargo test --workspace --all-features
 ```
