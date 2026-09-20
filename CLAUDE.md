@@ -54,7 +54,7 @@ without being asked; they cost money.
 - **Dependencies are a cost.** Prefer the standard library or something already
   in the tree. New dependencies belong behind a feature flag unless they are
   load-bearing.
-- **MSRV is 1.85.** No newer APIs, no `nightly`.
+- **MSRV is 1.88.** No newer APIs, no `nightly`.
 
 ## Gotchas
 

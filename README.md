@@ -3,7 +3,7 @@
 [![CI](https://github.com/noahbclarkson/typesafe-api-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/noahbclarkson/typesafe-api-rs/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/typesafe-api.svg)](https://crates.io/crates/typesafe-api)
 [![docs.rs](https://img.shields.io/docsrs/typesafe-api)](https://docs.rs/typesafe-api)
-[![MSRV](https://img.shields.io/badge/MSRV-1.85-blue)](https://releases.rs)
+[![MSRV](https://img.shields.io/badge/MSRV-1.88-blue)](https://releases.rs)
 
 A Rust client for the [TypeSafe](https://typesafe.ai) System One API.
 

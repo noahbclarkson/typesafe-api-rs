@@ -289,8 +289,13 @@ body — the wire format is the contract), `tokio` with `macros` and
 
 Semantic versioning. Public enums that mirror server-side vocabulary carry
 `#[non_exhaustive]`, so a new API error category or answer kind is a minor
-release. `cargo-semver-checks` runs on every pull request. MSRV is 1.85 and a
+release. `cargo-semver-checks` runs on every pull request. MSRV is 1.88 and a
 bump is a minor release, called out in the changelog.
+
+The floor comes from `darling`, which the derives are built on; everything
+else in the tree builds on 1.85. It is a single number rather than one per
+feature because `derive` is the reason most people reach for this crate, and a
+promise that only holds with it turned off is not a useful promise.
 
 ## Roadmap
 

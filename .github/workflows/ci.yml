@@ -43,7 +43,7 @@ jobs:
           - os: ubuntu-latest
             rust: beta
           - os: ubuntu-latest
-            rust: "1.85"
+            rust: "1.88"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master

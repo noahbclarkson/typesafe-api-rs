@@ -11,7 +11,7 @@ cd typesafe-api-rs
 cargo test --workspace --all-features
 ```
 
-You need a stable toolchain with `rustfmt` and `clippy`. The MSRV is 1.85 and CI
+You need a stable toolchain with `rustfmt` and `clippy`. The MSRV is 1.88 and CI
 enforces it, so avoid APIs newer than that.
 
 Tests that hit the live API are `#[ignore]`d and read `TYPESAFE_API_KEY`. They
