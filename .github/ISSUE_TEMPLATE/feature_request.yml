@@ -1,0 +1,24 @@
+name: Feature request
+description: Something the SDK should make easier.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do, and where does the SDK get in the way?
+    validations:
+      required: true
+
+  - type: textarea
+    id: sketch
+    attributes:
+      label: How it would read
+      description: Sketch the code you wish you could write. Rough is fine.
+      render: rust
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you do today
+      description: The workaround you are using, if there is one.

@@ -1,0 +1,4 @@
+[default.extend-words]
+# The API calls its yes/no primitive a "noul". It is not a typo.
+noul = "noul"
+nouls = "nouls"
