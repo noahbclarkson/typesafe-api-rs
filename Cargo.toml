@@ -18,23 +18,23 @@ typesafe-api-macros = { version = "0.1.0", path = "crates/typesafe-api-macros" }
 
 backon = { version = "1.6", default-features = false, features = ["std", "std-blocking-sleep", "tokio-sleep"] }
 darling = "0.24"
-futures-util = { version = "0.3.31", default-features = false, features = ["std"] }
+futures-util = { version = "0.3.34", default-features = false, features = ["std"] }
 heck = "0.5"
 indexmap = { version = "2.14", features = ["serde"] }
-proc-macro2 = "1.0.95"
-quote = "1.0.40"
+proc-macro2 = "1.0.107"
+quote = "1.0.47"
 reqwest = { version = "0.13.5", default-features = false, features = ["json", "charset", "http2", "system-proxy"] }
 secrecy = "0.10.3"
-serde = { version = "1.0.228", features = ["derive"] }
+serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"
 syn = { version = "3.0.6", features = ["full", "extra-traits"] }
 thiserror = "2.0.20"
-tokio = { version = "1.47.1", default-features = false, features = ["time"] }
-tracing = { version = "0.1.41", default-features = false, features = ["std"] }
+tokio = { version = "1.53.1", default-features = false, features = ["time"] }
+tracing = { version = "0.1.44", default-features = false, features = ["std"] }
 
 insta = { version = "1.48", features = ["json"] }
-tokio-test = "0.4.4"
-trybuild = "1.0.104"
+tokio-test = "0.4.5"
+trybuild = "1.0.121"
 wiremock = "0.6.5"
 
 [workspace.lints.rust]
