@@ -31,7 +31,7 @@ jobs:
             echo "present=false" >> "$GITHUB_OUTPUT"
             echo "::notice::CARGO_REGISTRY_TOKEN is not set, so releases are paused. Add the secret to enable publishing."
           fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: steps.token.outputs.present == 'true'
         with:
           fetch-depth: 0
