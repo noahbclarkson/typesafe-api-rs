@@ -211,6 +211,25 @@ client.evaluate(&state, questions)
     .await?;
 ```
 
+## A local model
+
+[laya-server](https://github.com/noahbclarkson/laya-server) runs
+[Laya](https://github.com/NandhaKishorM/laya), an open-weights System 1 model,
+behind the same API, in Docker or natively on a GPU. Point the client at it and
+nothing else in your code changes:
+
+```sh
+TYPESAFE_BASE_URL=http://localhost:8765
+TYPESAFE_API_KEY=local   # the client requires one; the server checks it only if configured to
+```
+
+The Docker image answers `jev-*` model names, so the default model works as it
+is; a native server needs `--jev-alias`, or set `TYPESAFE_DEFAULT_MODEL=laya`.
+`Response::model` always names the Laya checkpoint that answered, such as
+`laya-english`. Laya reads only the first few hundred tokens of a state and is
+weaker than Jev without fine-tuning; the laya-server README lists every
+difference.
+
 ## Nothing is hidden
 
 Every convenience is built from a public layer you can reach:
